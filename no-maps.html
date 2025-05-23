@@ -9,6 +9,14 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        #map-container {
+            display: none !important;
+        }
+        #guesses-container {
+            max-height: none !important;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -162,31 +170,7 @@
         </div>
     </div>
 
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&callback=Function.prototype" onerror="handleMapsError()"></script>
     <script src="js/cities-data.js"></script>
-    <script src="js/game.js"></script>
-    <script>
-        function handleMapsError() {
-            console.error('Google Maps failed to load');
-            // Redirect to simple version after short delay
-            setTimeout(() => {
-                window.location.href = 'simple.html?error=maps';
-            }, 1000);
-        }
-        
-        // Detect if maps loads properly
-        window.addEventListener('load', function() {
-            setTimeout(() => {
-                // Check if Google Maps is defined and working
-                try {
-                    if (typeof google === 'undefined' || typeof google.maps === 'undefined') {
-                        handleMapsError();
-                    }
-                } catch (e) {
-                    handleMapsError();
-                }
-            }, 2000); // Give maps 2 seconds to load
-        });
-    </script>
+    <script src="js/no-maps-game.js"></script>
 </body>
 </html>
