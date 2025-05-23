@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CityGuesser - Guess the City!</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>City<span>Guesser</span></h1>
+            <div class="header-buttons">
+                <button id="info-button" aria-label="How to play">
+                    <i class="fas fa-question-circle"></i>
+                </button>
+                <button id="stats-button" aria-label="Statistics">
+                    <i class="fas fa-chart-bar"></i>
+                </button>
+                <button id="settings-button" aria-label="Settings">
+                    <i class="fas fa-cog"></i>
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <div id="game-container">
+                <div id="hint-container">
+                    <div class="hint" id="continent-hint">
+                        <span class="hint-label">Continent:</span>
+                        <span class="hint-value" id="continent-value">?</span>
+                    </div>
+                    <div class="hint" id="population-hint">
+                        <span class="hint-label">Population:</span>
+                        <span class="hint-value" id="population-value">?</span>
+                    </div>
+                    <div class="hint" id="country-hint">
+                        <span class="hint-label">Country:</span>
+                        <span class="hint-value" id="country-value">?</span>
+                    </div>
+                </div>
+                
+                <div id="map-container">
+                    <div id="map"></div>
+                </div>
+
+                <div id="guesses-container">
+                    <div id="guesses-list"></div>
+                </div>
+
+                <div id="input-container">
+                    <input type="text" id="city-input" placeholder="Enter a city name..." autocomplete="off">
+                    <button id="submit-button">Guess</button>
+                </div>
+
+                <div id="distance-indicator" class="hidden">
+                    <span id="distance-value"></span>
+                    <div id="direction-arrow"></div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Modal for How to Play -->
+        <div id="info-modal" class="modal">
+            <div class="modal-content">
+                <span class="close-button">&times;</span>
+                <h2>How to Play</h2>
+                <ul>
+                    <li>Guess the mystery city in 6 tries or less</li>
+                    <li>After each guess, you'll get hints about how close you are</li>
+                    <li>You'll see the distance and direction to the target city</li>
+                    <li>Additional hints will be revealed as you make guesses</li>
+                    <li>A new city is available each day!</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Modal for Statistics -->
+        <div id="stats-modal" class="modal">
+            <div class="modal-content">
+                <span class="close-button">&times;</span>
+                <h2>Your Statistics</h2>
+                <div class="stats-container">
+                    <div class="stat-item">
+                        <div class="stat-value" id="games-played">0</div>
+                        <div class="stat-label">Played</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="win-percentage">0</div>
+                        <div class="stat-label">Win %</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="current-streak">0</div>
+                        <div class="stat-label">Current Streak</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="max-streak">0</div>
+                        <div class="stat-label">Max Streak</div>
+                    </div>
+                </div>
+                <h3>Guess Distribution</h3>
+                <div id="guess-distribution"></div>
+                <div id="share-container">
+                    <button id="share-button">Share Results</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal for Settings -->
+        <div id="settings-modal" class="modal">
+            <div class="modal-content">
+                <span class="close-button">&times;</span>
+                <h2>Settings</h2>
+                <div class="setting-item">
+                    <label for="dark-mode-toggle">Dark Mode</label>
+                    <div class="toggle-switch">
+                        <input type="checkbox" id="dark-mode-toggle">
+                        <span class="toggle-slider"></span>
+                    </div>
+                </div>
+                <div class="setting-item">
+                    <label for="units-toggle">Distance Units</label>
+                    <div class="toggle-container">
+                        <button class="unit-toggle selected" id="km-toggle">Kilometers</button>
+                        <button class="unit-toggle" id="mi-toggle">Miles</button>
+                    </div>
+                </div>
+                <div class="setting-item">
+                    <label for="difficulty-select">Difficulty</label>
+                    <select id="difficulty-select">
+                        <option value="easy">Easy</option>
+                        <option value="medium" selected>Medium</option>
+                        <option value="hard">Hard</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Over Modal -->
+        <div id="game-over-modal" class="modal">
+            <div class="modal-content">
+                <span class="close-button">&times;</span>
+                <h2 id="game-result-title">You Won!</h2>
+                <div id="result-details">
+                    <p>The city was <span id="correct-city">Paris</span></p>
+                    <p>You guessed it in <span id="guess-count">3</span> tries</p>
+                </div>
+                <div id="result-map-container">
+                    <div id="result-map"></div>
+                </div>
+                <div id="share-result-container">
+                    <button id="share-result-button">Share Results</button>
+                </div>
+                <div id="next-game-container">
+                    <p>Next city in <span id="next-game-countdown">23:59:59</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNLrJhOMz6idD05pzwk17mcLxZQsyD7vU&callback=Function.prototype"></script>
+    <script src="js/cities-data.js"></script>
+    <script src="js/game.js"></script>
+</body>
+</html>
