@@ -88,6 +88,68 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialize Google Maps
     function initMap() {
+        // Check if dark mode is enabled
+        const darkModeEnabled = localStorage.getItem('cityGuesserSettings') ? 
+            JSON.parse(localStorage.getItem('cityGuesserSettings')).darkMode : false;
+        
+        // Set map styles based on mode
+        const mapStyles = darkModeEnabled ? [
+            {elementType: 'geometry', stylers: [{color: '#242f3e'}]},
+            {elementType: 'labels.text.stroke', stylers: [{color: '#242f3e'}]},
+            {elementType: 'labels.text.fill', stylers: [{color: '#746855'}]},
+            {
+                featureType: 'administrative.locality',
+                elementType: 'labels',
+                stylers: [{visibility: 'off'}]
+            },
+            {
+                featureType: 'poi',
+                elementType: 'labels',
+                stylers: [{visibility: 'off'}]
+            },
+            {
+                featureType: 'road',
+                elementType: 'geometry',
+                stylers: [{color: '#38414e'}]
+            },
+            {
+                featureType: 'road',
+                elementType: 'geometry.stroke',
+                stylers: [{color: '#212a37'}]
+            },
+            {
+                featureType: 'road',
+                elementType: 'labels.text.fill',
+                stylers: [{color: '#9ca5b3'}]
+            },
+            {
+                featureType: 'water',
+                elementType: 'geometry',
+                stylers: [{color: '#17263c'}]
+            },
+            {
+                featureType: 'water',
+                elementType: 'labels.text.fill',
+                stylers: [{color: '#515c6d'}]
+            },
+            {
+                featureType: 'water',
+                elementType: 'labels.text.stroke',
+                stylers: [{color: '#17263c'}]
+            }
+        ] : [
+            {
+                featureType: "poi",
+                elementType: "labels",
+                stylers: [{ visibility: "off" }]
+            },
+            {
+                featureType: "administrative.locality",
+                elementType: "labels",
+                stylers: [{ visibility: "off" }]
+            }
+        ];
+        
         // Create the map centered on [0,0] with a world view
         gameMap = new google.maps.Map(elements.map, {
             center: { lat: 20, lng: 0 },
@@ -97,18 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
             streetViewControl: false,
             fullscreenControl: false,
             mapTypeControl: false,
-            styles: [
-                {
-                    featureType: "poi",
-                    elementType: "labels",
-                    stylers: [{ visibility: "off" }]
-                },
-                {
-                    featureType: "administrative.locality",
-                    elementType: "labels",
-                    stylers: [{ visibility: "off" }]
-                }
-            ]
+            styles: mapStyles
         });
     }
 
@@ -447,13 +498,72 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Create the result map
     function createResultMap() {
+        // Check if dark mode is enabled
+        const mapStyles = state.darkMode ? [
+            {elementType: 'geometry', stylers: [{color: '#242f3e'}]},
+            {elementType: 'labels.text.stroke', stylers: [{color: '#242f3e'}]},
+            {elementType: 'labels.text.fill', stylers: [{color: '#746855'}]},
+            {
+                featureType: 'administrative.locality',
+                elementType: 'labels',
+                stylers: [{visibility: 'off'}]
+            },
+            {
+                featureType: 'poi',
+                elementType: 'labels',
+                stylers: [{visibility: 'off'}]
+            },
+            {
+                featureType: 'road',
+                elementType: 'geometry',
+                stylers: [{color: '#38414e'}]
+            },
+            {
+                featureType: 'road',
+                elementType: 'geometry.stroke',
+                stylers: [{color: '#212a37'}]
+            },
+            {
+                featureType: 'road',
+                elementType: 'labels.text.fill',
+                stylers: [{color: '#9ca5b3'}]
+            },
+            {
+                featureType: 'water',
+                elementType: 'geometry',
+                stylers: [{color: '#17263c'}]
+            },
+            {
+                featureType: 'water',
+                elementType: 'labels.text.fill',
+                stylers: [{color: '#515c6d'}]
+            },
+            {
+                featureType: 'water',
+                elementType: 'labels.text.stroke',
+                stylers: [{color: '#17263c'}]
+            }
+        ] : [
+            {
+                featureType: "poi",
+                elementType: "labels",
+                stylers: [{ visibility: "off" }]
+            },
+            {
+                featureType: "administrative.locality",
+                elementType: "labels",
+                stylers: [{ visibility: "off" }]
+            }
+        ];
+        
         // Create a new map
         const resultMap = new google.maps.Map(elements.resultMap, {
             center: { lat: state.targetCity.latitude, lng: state.targetCity.longitude },
             zoom: 5,
             streetViewControl: false,
             fullscreenControl: false,
-            mapTypeControl: false
+            mapTypeControl: false,
+            styles: mapStyles
         });
         
         // Add marker for target city
@@ -895,6 +1005,75 @@ document.addEventListener('DOMContentLoaded', () => {
     function toggleDarkMode() {
         state.darkMode = elements.darkModeToggle.checked;
         document.body.classList.toggle('dark-mode', state.darkMode);
+        
+        // Force map to redraw with appropriate styles
+        if (gameMap) {
+            google.maps.event.trigger(gameMap, 'resize');
+            if (state.darkMode) {
+                gameMap.setOptions({
+                    styles: [
+                        {elementType: 'geometry', stylers: [{color: '#242f3e'}]},
+                        {elementType: 'labels.text.stroke', stylers: [{color: '#242f3e'}]},
+                        {elementType: 'labels.text.fill', stylers: [{color: '#746855'}]},
+                        {
+                            featureType: 'administrative.locality',
+                            elementType: 'labels',
+                            stylers: [{visibility: 'off'}]
+                        },
+                        {
+                            featureType: 'poi',
+                            elementType: 'labels',
+                            stylers: [{visibility: 'off'}]
+                        },
+                        {
+                            featureType: 'road',
+                            elementType: 'geometry',
+                            stylers: [{color: '#38414e'}]
+                        },
+                        {
+                            featureType: 'road',
+                            elementType: 'geometry.stroke',
+                            stylers: [{color: '#212a37'}]
+                        },
+                        {
+                            featureType: 'road',
+                            elementType: 'labels.text.fill',
+                            stylers: [{color: '#9ca5b3'}]
+                        },
+                        {
+                            featureType: 'water',
+                            elementType: 'geometry',
+                            stylers: [{color: '#17263c'}]
+                        },
+                        {
+                            featureType: 'water',
+                            elementType: 'labels.text.fill',
+                            stylers: [{color: '#515c6d'}]
+                        },
+                        {
+                            featureType: 'water',
+                            elementType: 'labels.text.stroke',
+                            stylers: [{color: '#17263c'}]
+                        }
+                    ]
+                });
+            } else {
+                gameMap.setOptions({
+                    styles: [
+                        {
+                            featureType: "poi",
+                            elementType: "labels",
+                            stylers: [{ visibility: "off" }]
+                        },
+                        {
+                            featureType: "administrative.locality",
+                            elementType: "labels",
+                            stylers: [{ visibility: "off" }]
+                        }
+                    ]
+                });
+            }
+        }
         saveSettings();
     }
 
