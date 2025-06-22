@@ -46,7 +46,7 @@ To run the game locally:
 1. Clone this repository
 2. Open `index.html` in a web browser
 
-Note: The Google Maps functionality requires an API key. For development, you can use your own API key by replacing it in the HTML file.
+Note: The Google Maps functionality requires a valid API key. If the map fails to load with an "Oops! Something went wrong" message, obtain your own key from Google Cloud and replace the placeholder `YOUR_API_KEY_HERE` in `index.html`.
 
 ## Credits
 
