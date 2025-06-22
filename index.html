@@ -162,7 +162,8 @@
         </div>
     </div>
 
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&callback=Function.prototype" onerror="handleMapsError()"></script>
+    <!-- Replace YOUR_API_KEY_HERE with a valid Google Maps API key -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY_HERE&callback=Function.prototype" onerror="handleMapsError()"></script>
     <script src="js/cities-data.js"></script>
     <script src="js/game.js"></script>
     <script>
@@ -173,6 +174,11 @@
                 window.location.href = 'simple.html?error=maps';
             }, 1000);
         }
+
+        // Called by Google Maps when authentication fails
+        window.gm_authFailure = function() {
+            handleMapsError();
+        };
         
         // Detect if maps loads properly
         window.addEventListener('load', function() {
